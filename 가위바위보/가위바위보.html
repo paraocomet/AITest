@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 1. 전체 페이지 중앙 정렬 및 배경색 */
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333333;
+            margin-top: 50px;
+            margin-bottom: 30px;
+        }
+
+         h2 {
+            color: brown;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* 2. 가위, 바위, 보 카드들을 가로로 나란히 정렬하는 상자 */
+        .game-container {
+            display: flex;            /* 요소들을 가로로 정렬해주는 속성 */
+            justify-content: center;  /* 가운데로 모아주기 */
+            gap: 30px;                /* 카드와 카드 사이의 간격 */
+            padding: 20px;
+            flex-wrap: wrap;          /* 화면이 좁아지면 자연스럽게 아래로 내려가게 함 */
+        }
+
+        /* 3. 개별 가위/바위/보 카드 스타일 */
+        .card {
+            background-color: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;      /* 테두리를 둥글게 */
+            padding: 20px;
+            width: 150px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 은은한 그림자 효과 */
+        }
+
+        /* 4. 이미지(또는 이모지) 영역 스타일 */
+        .image-box {
+            font-size: 5rem;          /* 이모지 크기를 크게 조절 */
+            margin-bottom: 15px;
+            background-color: #f1f3f5; /* 이미지 뒤쪽 연한 회색 배경 */
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* 실제 이미지 파일을 사용할 때 적용되는 스타일 */
+        .image-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* 5. 글자(텍스트) 스타일 */
+        .text-box {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #495057;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <h1>✊✌️✋ 가위 바위 보 게임</h1>
+
+    <div class="game-container">
+
+        <div class="card">
+            <div class="image-box">
+                ✌️
+                </div>
+            <p class="text-box">가위</p>
+        </div>
+
+        <div class="card">
+            <div class="image-box">
+                ✊
+                </div>
+            <p class="text-box">바위</p>
+        </div>
+
+        <div class="card">
+            <div class="image-box">
+                ✋
+                </div>
+            <p class="text-box">보</p>
+        </div>
+
+    </div>
+<button type="button" onclick="init()"><h2>게임시작하기</h2></button>
+<div id="webcam-container"></div>
+<div id="label-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "https://teachablemachine.withgoogle.com/models/lMB8zwt0Ok/";
+
+    let model, webcam, labelContainer, maxPredictions;
+
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        // Convenience function to setup a webcam
+        const flip = true; // whether to flip the webcam
+        webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        // append elements to the DOM
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
+    }
+
+    async function loop() {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    // run the webcam image through the image model
+    async function predict() {
+        // predict can take in an image, video or canvas html element
+        const prediction = await model.predict(webcam.canvas);
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+        }
+    }
+</script>
+
+</body>
+</html>
