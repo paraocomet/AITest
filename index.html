@@ -1,211 +1,94 @@
 <!DOCTYPE html>
-<!DOCTYPE 자기소개 >
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>백해성 | AI 교육자 · 마라토너 · 예비 창업가</title>
-</head>
-<body>
+    <style>
+        /* 1. 전체 기본 스타일 : 자연스럽고 편안한 톤 */
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f4f3ef; /* 따뜻하고 편안한 연베이지색 바탕 */
+            color: #4a4a4a; /* 눈이 피로하지 않은 짙은 회색 글자 */
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
 
-```
-<header>
-    <h1>백해성</h1>
-   
-    <p>AI 교육자 · 마라토너 · 독서가 · 글쓰기 실천가</p>
-    <style>h1 {color : blueviolet; background-color: orange;}</style>
-    
-    <figure>
-        <img
-            src="./images/marathon.png" 
-            alt="마라톤을 달리는 백해성 캐리커처"
-            width="200">
-        <figcaption>
-            오늘의 한 걸음이 내일의 기록을 만든다.
-        </figcaption>
-    </figure>
-</header>
+        /* 2. 상단 헤더 영역 */
+        header {
+            background-color: #2b4c3f; /* 마음을 차분하게 만드는 딥 그린 */
+            color: #ffffff;
+            text-align: center;
+            padding: 50px 20px;
+        }
 
-<nav>
-    <ul>
-        <li><a href="#intro">소개</a></li>
-        <li><a href="#ai">AI 에이전트</a></li>
-        <li><a href="#marathon">마라톤</a></li>
-        <li><a href="#books">독서</a></li>
-        <li><a href="#writing">글쓰기</a></li>
-        <li><a href="#vision">비전</a></li>
-    </ul>
-</nav>
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.3rem;
+            letter-spacing: 2px;
+        }
 
-<main>
+        header p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #bdc9c1; /* 은은한 허브톤 회색 부제목 */
+        }
 
-    <section id="intro">
-        <h2>자기소개</h2>
+        header img {
+            border: 5px solid #ffffff;
+            border-radius: 50%; /* 프로필 사진처럼 둥글게 */
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-        <article>
-            <p>
-                안녕하세요. 백해성입니다.
-                현재 AI 에이전트 마스터 과정을 수강하며
-                생성형 AI와 자동화 기술을 학습하고 있습니다.
-            </p>
+        header figcaption {
+            font-size: 0.9rem;
+            color: #a3b5a9;
+            margin-top: 10px;
+            font-style: italic;
+        }
 
-            <p>
-                건강한 삶을 위해 마라톤을 즐기며,
-                독서와 글쓰기를 통해 지속적인 성장을 추구하고 있습니다.
-            </p>
-        </article>
-    </section>
+        /* 3. 상단 내비게이션 메뉴 */
+        nav {
+            background-color: #3e5c4e; /* 헤더보다 살짝 밝은 초록색 */
+            text-align: center;
+        }
 
-    <section id="ai">
-        <h2>AI 에이전트 학습 및 목표</h2>
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
 
-        <article>
-            <h3>현재</h3>
-            <ul>
-                <li>AI 에이전트 마스터 과정 수강</li>
-                <li>Python 데이터 분석 학습</li>
-                <li>생성형 AI 활용 프로젝트 수행</li>
-                <li>AI 서비스 기획 역량 강화</li>
-            </ul>
-        </article>
+        nav li {
+            display: inline-block;
+        }
 
-        <article>
-            <h3>미래 목표</h3>
-            <ul>
-                <li>AI 강사 활동</li>
-                <li>AI 활용 교육 콘텐츠 개발</li>
-                <li>AI 기반 서비스 창업</li>
-                <li>AI 커뮤니티 운영</li>
-            </ul>
-        </article>
-    </section>
+        nav a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            transition: background-color 0.3s;
+        }
 
-    <section id="marathon">
-        <h2>마라톤 관리</h2>
+        nav a:hover {
+            background-color: #2b4c3f; /* 마우스를 올리면 차분하게 톤다운 */
+        }
 
-        <article>
-            <h3>일일 훈련 기록</h3>
+        /* 4. 본문을 모아주는 중앙 정렬 상자 */
+        .container {
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>날짜</th>
-                        <th>거리</th>
-                        <th>시간</th>
-                        <th>비고</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2026-06-17</td>
-                        <td>10km</td>
-                        <td>55분</td>
-                        <td>탄천 러닝</td>
-                    </tr>
-                </tbody>
-            </table>
-        </article>
-
-        <article>
-            <h3>대회 참가 이력</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>날짜</th>
-                        <th>대회명      </th>
-                        <th>장소        </th>
-                        <th>기록</th>
-                        <th>비고</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2026-06-13</td>
-                        <td>성남마라톤</td>
-                        <td>탄천종합운동장 10km</td>
-                        <td>55분</td>
-                        <td>운영위원회</td>
-                    </tr>
-                </tbody>
-            </table>
-            
-        </article>
-    </section>
-
-    <section id="books">
-        <h2>독서 관리</h2>
-
-        <article>
-            <h3>최근 읽은 책</h3>
-
-            <ol>
-                <li>AI 관련 도서</li>
-                <li>자기계발 도서</li>
-                <li>인문학 도서</li>
-            </ol>
-        </article>
-
-        <article>
-            <h3>독서 노트</h3>
-
-            <p>
-                읽은 책의 핵심 내용을 정리하고
-                실천 가능한 아이디어를 기록합니다.
-            </p>
-        </article>
-    </section>
-
-    <section id="writing">
-        <h2>매일 글쓰기</h2>
-
-        <article>
-            <p>
-                하루 한 편 이상 글을 작성하며
-                학습 내용과 경험을 기록합니다.
-            </p>
-
-            <blockquote>
-                기록은 미래의 나에게 보내는 가장 좋은 선물이다.
-            </blockquote>
-        </article>
-    </section>
-
-    <section id="vision">
-        <h2>나의 비전</h2>
-
-        <article>
-            <p>
-                AI 교육과 서비스를 통해 사람들의 성장을 돕고,
-                건강한 삶과 평생학습을 실천하는 교육자가 되고 싶습니다.
-            </p>
-
-            <p>
-                AI, 마라톤, 독서, 글쓰기를 연결하여
-                성장의 선순환을 만드는 것이 저의 목표입니다.
-            </p>
-        </article>
-    </section>
-
-</main>
-
-<aside>
-    <h2>핵심 가치</h2>
-
-    <ul>
-        <li>Learning</li>
-        <li>Action</li>
-        <li>Recording</li>
-        <li>Sharing</li>
-        <li>Growth</li>
-    </ul>
-</aside>
-
-<footer>
-    <p>
-        © 2026 백해성 | AI Agent · Marathon · Reading · Writing
-    </p>
-</footer>
-```
-
-</body>
-</html>
+        /* 5. 각 콘텐츠 섹션 스타일 */
+        section, aside {
+            background-color: #ffffff; /* 컨텐츠 박스는 깔끔한 흰색 */
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow:
