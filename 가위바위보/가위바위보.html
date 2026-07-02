@@ -3,159 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>가위바위보 게임</title>
     <style>
-        /* 1. 전체 페이지 중앙 정렬 및 배경색 */
         body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            text-align: center;
         }
 
         h1 {
-            color: #333333;
-            margin-top: 50px;
-            margin-bottom: 30px;
+            color: #333;
+            margin-bottom: 20px;
         }
 
-         h2 {
-            color: brown;
-            margin-top: 10px;
-            margin-bottom: 10px;
+        /* 버튼들을 가로로 배치하기 위한 컨테이너 */
+        .btn-container {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        /* 2. 가위, 바위, 보 카드들을 가로로 나란히 정렬하는 상자 */
-        .game-container {
-            display: flex;            /* 요소들을 가로로 정렬해주는 속성 */
-            justify-content: center;  /* 가운데로 모아주기 */
-            gap: 30px;                /* 카드와 카드 사이의 간격 */
-            padding: 20px;
-            flex-wrap: wrap;          /* 화면이 좁아지면 자연스럽게 아래로 내려가게 함 */
+        #webcam-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: #fff;
+            line-height: 0;
         }
 
-        /* 3. 개별 가위/바위/보 카드 스타일 */
-        .card {
-            background-color: #ffffff;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;      /* 테두리를 둥글게 */
-            padding: 20px;
-            width: 150px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* 은은한 그림자 효과 */
-        }
-
-        /* 4. 이미지(또는 이모지) 영역 스타일 */
-        .image-box {
-            font-size: 5rem;          /* 이모지 크기를 크게 조절 */
-            margin-bottom: 15px;
-            background-color: #f1f3f5; /* 이미지 뒤쪽 연한 회색 배경 */
-            padding: 10px;
-            border-radius: 10px;
-        }
-
-        /* 실제 이미지 파일을 사용할 때 적용되는 스타일 */
-        .image-box img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* 5. 글자(텍스트) 스타일 */
-        .text-box {
-            font-size: 1.5rem;
+        #result-container {
+            margin-top: 25px;
+            font-size: 2.5rem;
             font-weight: bold;
-            color: #495057;
-            margin: 0;
+            color: #4a90e2;
+            padding: 10px 30px;
+            border-radius: 50px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease-in-out;
+            transform: scale(1);
+        }
+
+        .pop {
+            transform: scale(1.08) !important;
+        }
+
+        #label-container {
+            margin-top: 20px;
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .prob-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .prob-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .prob-bar-bg {
+            width: 120px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-left: 10px;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            background-color: #4a90e2;
+            width: 0%;
+            transition: width 0.4s ease-out;
+        }
+
+        /* 버튼 기본 스타일 및 부드러운 전환 효과 */
+        button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* 시작 버튼 색상 */
+        #start-btn {
+            background-color: #4a90e2;
+        }
+        #start-btn:hover:not(:disabled) {
+            background-color: #357abd;
+            transform: translateY(-2px);
+        }
+
+        /* 중지 버튼 색상 */
+        #stop-btn {
+            background-color: #e24a4a;
+        }
+        #stop-btn:hover:not(:disabled) {
+            background-color: #bd3535;
+            transform: translateY(-2px);
+        }
+
+        /* 버튼이 비활성화(disabled) 되었을 때의 부드러운 스타일 변화 */
+        button:disabled {
+            background-color: #cccccc !important;
+            color: #888888;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none !important;
+            opacity: 0.6;
         }
     </style>
 </head>
 <body>
-    <div></div>
-    <h1>✊✌️✋ 가위 바위 보 게임</h1>
 
-    <div class="game-container">
-
-        <div class="card">
-            <div class="image-box">
-                ✌️
-                </div>
-            <p class="text-box">가위</p>
-        </div>
-
-        <div class="card">
-            <div class="image-box">
-                ✊
-                </div>
-            <p class="text-box">바위</p>
-        </div>
-
-        <div class="card">
-            <div class="image-box">
-                ✋
-                </div>
-            <p class="text-box">보</p>
-        </div>
-
+    <h1>가위바위보 게임</h1>
+    
+    <div class="btn-container">
+        <button type="button" id="start-btn" onclick="startGame()">게임 시작하기</button>
+        <button type="button" id="stop-btn" onclick="stopGame()" disabled>중지하기</button>
     </div>
-<button type="button" onclick="init()"><h2>게임시작하기</h2></button>
-<div id="webcam-container"></div>
-<div id="label-container"></div>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-<script type="text/javascript">
-    // More API functions here:
-    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    
+    <div id="webcam-container"></div>
+    <div id="result-container">준비 중...</div>
+    <div id="label-container"></div>
 
-    // the link to your model provided by Teachable Machine export panel
-    const URL = "https://teachablemachine.withgoogle.com/models/lMB8zwt0Ok/";
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    
+    <script type="text/javascript">
+        // ⚠️ 본인의 티처블머신 모델 URL로 변경하세요!
+        const URL = "https://teachablemachine.withgoogle.com/models/lMB8zwt0Ok/";
 
-    let model, webcam, labelContainer, maxPredictions;
+        let model, webcam, labelContainer, resultContainer, maxPredictions;
+        let lastUpdateTime = 0;
+        let isPlaying = false; // 게임이 실행 중인지 체크하는 플래그 변수
+        let animationFrameId;  // 루프를 멈추기 위해 고유 ID를 저장할 변수
 
-    // Load the image model and setup the webcam
-    async function init() {
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
-
-        // load the model and metadata
-        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-        // or files from your local hard drive
-        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
-
-        // Convenience function to setup a webcam
-        const flip = true; // whether to flip the webcam
-        webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
-        await webcam.setup(); // request access to the webcam
-        await webcam.play();
-        window.requestAnimationFrame(loop);
-
-        // append elements to the DOM
-        document.getElementById("webcam-container").appendChild(webcam.canvas);
-        labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) { // and class labels
-            labelContainer.appendChild(document.createElement("div"));
+        // 페이지 로드 시 모델을 미리 불러오면 시작할 때 버벅임이 줄어듭니다.
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+            
+            resultContainer = document.getElementById("result-container");
+            labelContainer = document.getElementById("label-container");
+            resultContainer.innerText = "대기 중...";
         }
-    }
+        
+        // 초기 모델 로드 실행
+        loadModel();
 
-    async function loop() {
-        webcam.update(); // update the webcam frame
-        await predict();
-        window.requestAnimationFrame(loop);
-    }
+        // [게임 시작] 버튼 클릭 시
+        async function startGame() {
+            if (isPlaying) return; // 이미 실행 중이면 중복 실행 방지
+            
+            // 버튼 활성화/비활성화 스위칭
+            document.getElementById("start-btn").disabled = true;
+            document.getElementById("stop-btn").disabled = false;
+            
+            resultContainer.innerText = "카메라 켜는 중...";
 
-    // run the webcam image through the image model
-    async function predict() {
-        // predict can take in an image, video or canvas html element
-        const prediction = await model.predict(webcam.canvas);
-        for (let i = 0; i < maxPredictions; i++) {
-            const classPrediction =
-                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-            labelContainer.childNodes[i].innerHTML = classPrediction;
+            // 웹캠이 설정되어 있지 않은 경우에만 새로 생성
+            if (!webcam) {
+                const flip = true; 
+                webcam = new tmImage.Webcam(400, 400, flip); 
+                await webcam.setup(); 
+                document.getElementById("webcam-container").appendChild(webcam.canvas);
+            }
+            
+            await webcam.play();
+            isPlaying = true;
+            
+            // 확률 레이아웃 초기화
+            initLabelLayout();
+            
+            // 루프 시작
+            animationFrameId = window.requestAnimationFrame(loop);
         }
-    }
-</script>
 
+        // [중지하기] 버튼 클릭 시
+        function stopGame() {
+            if (!isPlaying) return;
+
+            // 버튼 활성화/비활성화 스위칭
+            document.getElementById("start-btn").disabled = false;
+            document.getElementById("stop-btn").disabled = true;
+
+            isPlaying = false;
+            
+            // 1. 프레임 루프 정지
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+            
+            // 2. 웹캠 일시정지
+            if (webcam) {
+                webcam.pause();
+            }
+
+            resultContainer.innerText = "일시 정지됨";
+        }
+
+        function initLabelLayout() {
+            labelContainer.innerHTML = "";
+            for (let i = 0; i < maxPredictions; i++) {
+                const row = document.createElement("div");
+                row.className = "prob-row";
+                row.innerHTML = `
+                    <span class="class-name"></span>
+                    <div style="display:flex; align-items:center;">
+                        <span class="prob-percent">0%</span>
+                        <div class="prob-bar-bg"><div class="prob-bar-fill"></div></div>
+                    </div>
+                `;
+                labelContainer.appendChild(row);
+            }
+        }
+
+        async function loop(timestamp) {
+            if (!isPlaying) return; // 중지 상태라면 연산을 완전히 건너뜀
+
+            webcam.update();
+            
+            if (timestamp - lastUpdateTime >= 500) {
+                await predict();
+                lastUpdateTime = timestamp;
+            }
+            
+            // 다음 프레임 요청 시 ID 저장 (나중에 취소하기 위함)
+            animationFrameId = window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            if (!isPlaying) return;
+            const prediction = await model.predict(webcam.canvas);
+            
+            let highestClassName = "";
+            let highestProbability = -1;
+
+            for (let i = 0; i < maxPredictions; i++) {
+                const className = prediction[i].className;
+                const probability = prediction[i].probability;
+                const percentString = (probability * 100).toFixed(0) + "%";
+
+                if (probability > highestProbability) {
+                    highestProbability = probability;
+                    highestClassName = className;
+                }
+
+                const row = labelContainer.childNodes[i];
+                if (row && row.querySelector(".class-name")) {
+                    row.querySelector(".class-name").innerText = className;
+                    row.querySelector(".prob-percent").innerText = percentString;
+                    row.querySelector(".prob-bar-fill").style.width = percentString;
+                }
+            }
+
+            if (resultContainer.innerText !== highestClassName) {
+                resultContainer.innerText = highestClassName;
+                resultContainer.classList.add("pop");
+                setTimeout(() => {
+                    resultContainer.classList.remove("pop");
+                }, 300);
+            }
+        }
+    </script>
 </body>
 </html>
